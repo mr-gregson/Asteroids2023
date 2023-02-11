@@ -1,0 +1,18 @@
+{
+	"folders": [
+		{
+			"path": "../../../.."
+		},
+		{
+			"path": "../../../../../My Common Methods"
+		},
+		{
+			"path": "../../../../../My Components"
+		},
+		{
+			"name": ".git",
+			"path": "../../../../.git"
+		}
+	],
+	"settings": {}
+}
