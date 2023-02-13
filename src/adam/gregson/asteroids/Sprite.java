@@ -34,6 +34,7 @@ public abstract class Sprite {
 		double tempY = Math.sin(angle)*dx + Math.cos(angle)*dy;
 		dx = tempX;
 		dy = tempY;
+		System.out.println("rotateLeft");
 	}
 
 	public void rotateRight(){

@@ -3,6 +3,9 @@ package adam.gregson.asteroids;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
+import java.security.KeyException;
+import java.awt.event.KeyAdapter;
 
 import javax.swing.JPanel;
 
@@ -17,11 +20,30 @@ public class GamePanel extends JPanel {
 	
 	public GamePanel(AsteroidsGame game) {
 		this.game = game;
-		ship = new Ship(0,0);
+		ship = new Ship(WIDTH/2,HEIGHT/2);
+		initGUI();
 	}
 	
 	public Dimension getPreferredSize() {
 		return new Dimension(WIDTH, HEIGHT);
+	}
+
+	public void initGUI(){
+		setFocusable(true);
+		addKeyListener(new KeyAdapter(){
+			@Override
+			public void keyPressed(KeyEvent e){
+				int key = e.getKeyCode();
+				switch (key){
+					case KeyEvent.VK_A:
+						ship.rotateLeft();
+						break;
+					case KeyEvent.VK_D:
+						ship.rotateRight();
+				}
+				
+			}
+		});
 	}
 	
 	public void paintComponent(Graphics g) {
