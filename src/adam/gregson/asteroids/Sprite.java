@@ -5,21 +5,35 @@ import java.awt.image.BufferedImage;
 public abstract class Sprite {
 	
 	private BufferedImage[] images;
-	private double dx;
-	private double dy;
-	private int currentImage;
-	private double angle;
 	private double x;
 	private double y;
 
+	private double dx;
+	private double dy;
+	private int maxX;
+	private int maxY;
+	private int currentImage;
+	private double angle;
+
+	private static final int maxA = 2;
 	
-	public Sprite(BufferedImage[] images, double x, double y) {
+	
+	/**
+	 * @param images
+	 * @param x
+	 * @param y
+	 * @param maxX
+	 * @param maxY
+	 */
+	public Sprite(BufferedImage[] images, double x, double y, int maxX, int maxY) {
 		this.images = images;
 		this.dx = 0;
 		this.dy = 0;
 		this.currentImage = 0;	
 		this.x = x;
 		this.y = y;
+		this.maxX = maxX;
+		this.maxY = maxY;
 
 		this.angle = 2*Math.PI / images.length;
 	}
@@ -34,7 +48,6 @@ public abstract class Sprite {
 		double tempY = Math.sin(angle)*dx + Math.cos(angle)*dy;
 		dx = tempX;
 		dy = tempY;
-		System.out.println("rotateLeft");
 	}
 
 	public void rotateRight(){
@@ -49,13 +62,19 @@ public abstract class Sprite {
 	}
 
 	public void accelerate(double acceleration) {
-		dx += acceleration * Math.cos(currentImage * angle);
-		dy += acceleration * Math.sin(currentImage * angle);
+		if (Math.sqrt(dx*dx+dy+dy) < maxA){
+			dx += acceleration * Math.cos(currentImage * angle);
+			dy += acceleration * Math.sin(currentImage * angle);
+		}
 	}
 
 	public void move() {
 		x += dx;
 		y += dy;
+		if (x >= maxX) x -= maxX;
+		if (y >= maxY) y -= maxY;
+		if (x < 0) x += maxX;
+		if (y < 0) y += maxY;
 	}
 
 	public BufferedImage getImage() {
@@ -75,7 +94,7 @@ public abstract class Sprite {
 	}	
 
 	public void setY(double y) {
-		this.y = y;
+		if (y < maxY) this.y = y;
 	}
 
 }

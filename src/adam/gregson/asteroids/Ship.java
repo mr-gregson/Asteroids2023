@@ -24,12 +24,12 @@ public class Ship extends Sprite{
 	}
 	
 	
-	public Ship(double x, double y) {
-		super(images, x, y);
+	public Ship(double x, double y, int maxX, int maxY) {
+		super(images, x, y, maxX, maxY);
 	}
 
 	public static void main(String[] args) {
-		Ship ship = new Ship(0, 0);
+		Ship ship = new Ship(0, 0, 0, 0);
 
 	}
 }
