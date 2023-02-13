@@ -8,12 +8,13 @@ public abstract class Sprite {
 	private double x;
 	private double y;
 
-	private double dx;
-	private double dy;
+	private double speed;
 	private int maxX;
 	private int maxY;
 	private int currentImage;
 	private double angle;
+	private double v_x;
+	private double v_y;
 
 	private static final int maxA = 2;
 	
@@ -27,13 +28,14 @@ public abstract class Sprite {
 	 */
 	public Sprite(BufferedImage[] images, double x, double y, int maxX, int maxY) {
 		this.images = images;
-		this.dx = 0;
-		this.dy = 0;
+		this.speed = 0;
 		this.currentImage = 0;	
 		this.x = x;
 		this.y = y;
 		this.maxX = maxX;
 		this.maxY = maxY;
+		this.v_x = 1;
+		this.v_y = 0;
 
 		this.angle = 2*Math.PI / images.length;
 	}
