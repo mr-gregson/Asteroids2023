@@ -13,10 +13,11 @@ public class GamePanel extends JPanel {
 	private static final int HEIGHT = 800;
 	
 	private AsteroidsGame game;
+	private Ship ship;
 	
 	public GamePanel(AsteroidsGame game) {
 		this.game = game;
-		
+		ship = new Ship(0,0);
 	}
 	
 	public Dimension getPreferredSize() {
@@ -26,6 +27,7 @@ public class GamePanel extends JPanel {
 	public void paintComponent(Graphics g) {
 		g.setColor(Color.black);
 		g.fillRect(0, 0, WIDTH, HEIGHT);
+		g.drawImage(ship.getImage(),(int) ship.getX(),(int) ship.getY(),null);
 	}
 	
 
