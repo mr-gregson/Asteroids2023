@@ -9,6 +9,10 @@ import javax.swing.Timer;
 import java.awt.event.KeyAdapter;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.FileInputStream;
+import java.io.IOException;
 
 import javax.swing.JPanel;
 
@@ -21,10 +25,31 @@ public class GamePanel extends JPanel {
 	private AsteroidsGame game;
 	private Ship ship;
 	private Timer timer;
+	private static BufferedImage[] shipImages;
+	private static BufferedImage[][] rockImages;
+	private static BufferedImage missileImage;
+
+	private final static int NUMBER_OF_SHIP_IMAGES = 64;
+	private final static int NUMBER_OF_ROCK_IMAGES = 32;
+	private final static int NUMBER_OF_ROCK_TYPES = 3;
+
+	static{
+		shipImages = new BufferedImage[NUMBER_OF_SHIP_IMAGES];
+		for (int i = 0; i < NUMBER_OF_SHIP_IMAGES; ++i){
+			shipImages[i] = readImage(String.format("img/ship/ship%04d.png",i));
+		}
+		rockImages = new BufferedImage[NUMBER_OF_ROCK_TYPES][];
+		for (int i = 0; i < NUMBER_OF_ROCK_TYPES; ++i){
+			rockImages[i] = new BufferedImage[NUMBER_OF_ROCK_IMAGES];
+			for (int j = 0; j < NUMBER_OF_ROCK_IMAGES; ++j){
+				rockImages[i][j] = readImage(String.format("img/rock%d/rock%d%04d.png",i+1,i+1,j));
+			}
+		}
+	}
 	
 	public GamePanel(AsteroidsGame game) {
 		this.game = game;
-		ship = new Ship(WIDTH/2,HEIGHT/2,WIDTH, HEIGHT);
+		ship = new Ship(shipImages, WIDTH/2,HEIGHT/2,WIDTH, HEIGHT);
 		initGUI();
 		timer.start();
 	}
@@ -74,5 +99,15 @@ public class GamePanel extends JPanel {
 		repaint();
 	}
 	
+	private static BufferedImage readImage(String filename){
+		BufferedImage image = null;
+		try{
+			image = ImageIO.read(new FileInputStream(filename));
+		}
+		catch (IOException e){
+			e.printStackTrace();
+		}
+		return image;
+	}
 
 }
