@@ -24,7 +24,7 @@ public class GamePanel extends JPanel {
 	
 	public GamePanel(AsteroidsGame game) {
 		this.game = game;
-		ship = new Ship(WIDTH/2,HEIGHT/2,WIDTH,HEIGHT);
+		ship = new Ship(WIDTH/2,HEIGHT/2,WIDTH, HEIGHT);
 		initGUI();
 		timer.start();
 	}

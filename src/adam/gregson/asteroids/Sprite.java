@@ -7,16 +7,14 @@ public abstract class Sprite {
 	private BufferedImage[] images;
 	private double x;
 	private double y;
-
-	private double speed;
 	private int maxX;
 	private int maxY;
+
 	private int currentImage;
 	private double angle;
-	private double v_x;
-	private double v_y;
+	private double dx;
+	private double dy;
 
-	private static final int maxA = 2;
 	
 	
 	/**
@@ -28,14 +26,11 @@ public abstract class Sprite {
 	 */
 	public Sprite(BufferedImage[] images, double x, double y, int maxX, int maxY) {
 		this.images = images;
-		this.speed = 0;
 		this.currentImage = 0;	
 		this.x = x;
 		this.y = y;
 		this.maxX = maxX;
 		this.maxY = maxY;
-		this.v_x = 1;
-		this.v_y = 0;
 
 		this.angle = 2*Math.PI / images.length;
 	}
@@ -46,10 +41,6 @@ public abstract class Sprite {
 		if (currentImage < 0) {
 			currentImage = images.length - 1;
 		}
-		double tempX = Math.cos(angle)*dx - Math.sin(angle)*dy;
-		double tempY = Math.sin(angle)*dx + Math.cos(angle)*dy;
-		dx = tempX;
-		dy = tempY;
 	}
 
 	public void rotateRight(){
@@ -57,26 +48,16 @@ public abstract class Sprite {
 		if (currentImage >= images.length) {
 			currentImage = 0;
 		}
-		double tempX = Math.cos(-angle)*dx - Math.sin(-angle)*dy;
-		double tempY = Math.sin(-angle)*dx + Math.cos(-angle)*dy;
-		dx = tempX;
-		dy = tempY;
 	}
 
 	public void accelerate(double acceleration) {
-		if (Math.sqrt(dx*dx+dy+dy) < maxA){
-			dx += acceleration * Math.cos(currentImage * angle);
-			dy += acceleration * Math.sin(currentImage * angle);
-		}
+		dx += acceleration * Math.cos(currentImage * angle);
+		dy += acceleration * Math.sin(currentImage * angle);
 	}
 
 	public void move() {
-		x += dx;
-		y += dy;
-		if (x >= maxX) x -= maxX;
-		if (y >= maxY) y -= maxY;
-		if (x < 0) x += maxX;
-		if (y < 0) y += maxY;
+		x = Math.floorMod((int) (x+dx),maxX);
+		y = Math.floorMod((int) (y+dy),maxY);
 	}
 
 	public BufferedImage getImage() {
@@ -96,7 +77,15 @@ public abstract class Sprite {
 	}	
 
 	public void setY(double y) {
-		if (y < maxY) this.y = y;
+		this.y = y;
+	}
+
+	public double getDirection(){
+		return currentImage * angle;
+	}
+
+	public double getSpeed(){
+		return Math.sqrt(dx*dx+dy*dy);
 	}
 
 }
