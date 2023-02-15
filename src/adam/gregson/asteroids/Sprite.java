@@ -39,14 +39,14 @@ public abstract class Sprite {
 	public void rotateLeft(){
 		currentImage--;
 		if (currentImage < 0) {
-			currentImage = images.length - 1;
+			currentImage = Math.floorMod(currentImage, images.length);
 		}
 	}
 
 	public void rotateRight(){
 		currentImage++;
 		if (currentImage >= images.length) {
-			currentImage = 0;
+			currentImage = Math.floorMod(currentImage, images.length);
 		}
 	}
 
@@ -56,8 +56,13 @@ public abstract class Sprite {
 	}
 
 	public void move() {
-		x = Math.floorMod((int) (x+dx),maxX);
-		y = Math.floorMod((int) (y+dy),maxY);
+		x += dx;
+		y += dy;
+		if (x < 0) x += maxX;
+		if (y < 0) y += maxY;
+		if (x > maxX) x -= maxX;
+		if (y > maxY) y -= maxY;
+	
 	}
 
 	public BufferedImage getImage() {
@@ -68,24 +73,29 @@ public abstract class Sprite {
 		return x;
 	}	
 
-	public void setX(double x) {
-		this.x = x;
-	}
-
 	public double getY() {
 		return y;
 	}	
 
-	public void setY(double y) {
-		this.y = y;
+	/**
+	 * @return integer 0 <=  n < images.length representing the number of 
+	 * increments in the counterclockwise direction.
+	 */
+	public int getDirection(){
+		return currentImage;
 	}
 
-	public double getDirection(){
-		return currentImage * angle;
+	public void setDirection(int increments){
+		currentImage = Math.floorMod(increments,images.length);
 	}
 
 	public double getSpeed(){
 		return Math.sqrt(dx*dx+dy*dy);
 	}
 
+	public void setSpeed(double speed){
+		dx = speed * Math.cos(currentImage * angle);
+		dy = speed * Math.sin(currentImage * angle);
+
+	}
 }

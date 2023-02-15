@@ -4,9 +4,22 @@ import java.awt.image.BufferedImage;
 
 public class Rock extends Sprite {
 
-    public Rock(BufferedImage[] images, double x, double y, int maxX, int maxY) {
+    private RockSize rockSize;
+    private boolean rotateLeft;
+
+    public Rock(BufferedImage[] images, RockSize rockSize, double x, double y, int maxX, int maxY) {
         super(images, x, y, maxX, maxY);
-        //TODO Auto-generated constructor stub
+        this.rockSize = rockSize;
+        this.rotateLeft = Math.random() < 0.5;
+    }
+
+    public RockSize getRockSize(){
+        return rockSize;
+    }
+
+    public void rotate(){
+        if (rotateLeft) rotateLeft();
+        else rotateRight();
     }
     
 }
