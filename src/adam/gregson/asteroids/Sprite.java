@@ -5,17 +5,20 @@ import java.awt.image.BufferedImage;
 public abstract class Sprite {
 	
 	private BufferedImage[] images;
-	private double x;
-	private double y;
 	private int maxX;
 	private int maxY;
 
 	private int currentImage;
-	private double angle;
-	private double dx;
-	private double dy;
+	protected double angle;
 
 	
+	protected double x;
+	protected double y;
+	protected double dx;
+	protected double dy;
+
+	// Will always be constant
+	protected double dt;
 	
 	/**
 	 * @param images
@@ -24,13 +27,14 @@ public abstract class Sprite {
 	 * @param maxX
 	 * @param maxY
 	 */
-	public Sprite(BufferedImage[] images, double x, double y, int maxX, int maxY) {
+	public Sprite(BufferedImage[] images, double x, double y, int maxX, int maxY, double deltaTime) {
 		this.images = images;
 		this.currentImage = 0;	
 		this.x = x;
 		this.y = y;
 		this.maxX = maxX;
 		this.maxY = maxY;
+		this.dt = deltaTime;
 
 		this.angle = 2*Math.PI / images.length;
 	}
@@ -50,19 +54,21 @@ public abstract class Sprite {
 		}
 	}
 
+	// Change speed [dx, dy] by acceleration
 	public void accelerate(double acceleration) {
-		dx += acceleration * Math.cos(currentImage * angle);
-		dy += acceleration * Math.sin(currentImage * angle);
+		dx += acceleration * Math.cos(currentImage * angle) * dt;
+		dy += acceleration * Math.sin(currentImage * angle) * dt;
 	}
 
 	public void move() {
-		x += dx;
-		y += dy;
+		x += dx * dt;
+		y += dy * dt;
+
+		// Loop the position of the asteroid
 		if (x < 0) x += maxX;
 		if (y < 0) y += maxY;
 		if (x > maxX) x -= maxX;
 		if (y > maxY) y -= maxY;
-	
 	}
 
 	public BufferedImage getImage() {
@@ -86,11 +92,11 @@ public abstract class Sprite {
 	}
 
 	public void setDirection(int increments){
-		currentImage = Math.floorMod(increments,images.length);
+		currentImage = Math.floorMod(increments, images.length);
 	}
 
 	public double getSpeed(){
-		return Math.sqrt(dx*dx+dy*dy);
+		return Math.sqrt(dx*dx + dy*dy);
 	}
 
 	public void setSpeed(double speed){

@@ -14,6 +14,7 @@ public class AsteroidsGame extends JFrame{
 	
 	
 	public AsteroidsGame() {
+		// Configure window settings
 		setTitle("Gasteroids");
 		initGUI();
 		pack();
@@ -23,7 +24,6 @@ public class AsteroidsGame extends JFrame{
 	}
 
 	private void initGUI(){
-		
 		// infoPanel
 		infoPanel = new InfoPanel(this);
 		add(infoPanel,BorderLayout.PAGE_START);
@@ -40,13 +40,14 @@ public class AsteroidsGame extends JFrame{
 			UIManager.setLookAndFeel(className);
 		}
 		catch (Exception e) {}
+
+		// Start game
 		SwingUtilities.invokeLater(new Runnable() {
 
 			@Override
 			public void run() {
-				new AsteroidsGame();				
+				new AsteroidsGame();
 			}
-			
 		});
 	}
 

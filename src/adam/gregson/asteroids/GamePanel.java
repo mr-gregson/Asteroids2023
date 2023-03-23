@@ -21,44 +21,60 @@ import java.util.HashMap;
 import javax.swing.JPanel;
 
 public class GamePanel extends JPanel {
-
+	// UI configuration
 	private static final long serialVersionUID = 1L;
 	private static final int WIDTH = 1300;
 	private static final int HEIGHT = 800;
-	
-	private AsteroidsGame game;
-	private Ship ship;
-	private List<Rock> rocks;
-	private Timer timer;
 
-	private static BufferedImage[] shipImages;
-	private static Map<RockSize,BufferedImage[]> rockImages;
-	private static BufferedImage missileImage;
-
-	
-
+	// Image loading and configuration
 	private final static int NUMBER_OF_SHIP_IMAGES = 64;
 	private final static int NUMBER_OF_ROCK_IMAGES = 32;
 	private final static int NUMBER_OF_ROCK_TYPES = 3;
 
-	static{
+	// Image storage
+	private static BufferedImage[] shipImages;
+	private static Map<RockSize,BufferedImage[]> rockImages;
+	private static BufferedImage missileImage;
+
+
+	// Entities
+	private AsteroidsGame game;
+	private Ship ship;
+	private List<Rock> rocks;
+
+	// Timing
+	private Timer timer;
+	private final int FRAMES_PER_SECOND = 50;
+
+	// deltaTime is the amount of time that changes between each frame.
+	private final double deltaTime = 1 / ((double) FRAMES_PER_SECOND);
+
+	static {
 		shipImages = new BufferedImage[NUMBER_OF_SHIP_IMAGES];
+
+		// Load images of the ships
 		for (int i = 0; i < NUMBER_OF_SHIP_IMAGES; ++i){
-			shipImages[i] = readImage(String.format("img/ship/ship%04d.png",i));
+			shipImages[i] = readImage(String.format("img/ship/ship%04d.png", i));
 		}
-		rockImages = new HashMap<>();
+
+		// Load all images of rocks and divide with rockImages map into into large, medium, and small types
+		rockImages = new HashMap<RockSize, BufferedImage[]>();
 		RockSize[] rockSizes = RockSize.values();
+		
 		for (int i = 0; i < NUMBER_OF_ROCK_TYPES; ++i){
 			rockImages.put(rockSizes[i], new BufferedImage[NUMBER_OF_ROCK_IMAGES]);
+			
 			for (int j = 0; j < NUMBER_OF_ROCK_IMAGES; ++j){
 				rockImages.get(rockSizes[i])[j] = readImage(String.format("img/rock%d/rock%d%04d.png",i+1,i+1,j));
 			}
 		}
 	}
 	
+	// Instantiate game
 	public GamePanel(AsteroidsGame game) {
 		this.game = game;
-		ship = new Ship(shipImages, WIDTH/2,HEIGHT/2,WIDTH, HEIGHT);
+
+		ship = new Ship(shipImages, WIDTH/2, HEIGHT/2, WIDTH, HEIGHT, deltaTime);
 		rocks = new LinkedList<>();
 		initGUI();
 		timer.start();
@@ -68,13 +84,14 @@ public class GamePanel extends JPanel {
 		return new Dimension(WIDTH, HEIGHT);
 	}
 
-	public void initGUI(){
+	// Instantiate gameloop
+	public void initGUI() {
 		setFocusable(true);
 		addKeyListener(new KeyAdapter(){
 			@Override
 			public void keyPressed(KeyEvent e){
 				int key = e.getKeyCode();
-				switch (key){
+				switch (key) {
 					case KeyEvent.VK_A:
 						ship.rotateLeft();
 						break;
@@ -82,16 +99,16 @@ public class GamePanel extends JPanel {
 						ship.rotateRight();
 						break;
 					case KeyEvent.VK_W:
-						ship.accelerate(0.1);
+						ship.accelerate(500);
 				}
 				repaint();
 			}
 		});
 
-		timer = new Timer(30,new ActionListener() {
-			
+		timer = new Timer(1000 / FRAMES_PER_SECOND, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				// Refer to timedAction for main game loop
 				timedAction();
 			}
 		});
@@ -100,13 +117,14 @@ public class GamePanel extends JPanel {
 	}
 
 	private void addRock(RockSize rockSize, int x, int y, int direction){
-		Rock rock = new Rock(rockImages.get(rockSize),rockSize, x,y,WIDTH,HEIGHT);
+		Rock rock = new Rock(rockImages.get(rockSize), rockSize, x, y, WIDTH, HEIGHT, deltaTime);
 		rock.setDirection(18);
-		rock.setSpeed(1);
+		rock.setSpeed(35);
 
 		rocks.add(rock);
 	}
 	
+	// Paint all graphics
 	public void paintComponent(Graphics g) {
 		g.setColor(Color.black);
 		g.fillRect(0, 0, WIDTH, HEIGHT);
@@ -116,8 +134,11 @@ public class GamePanel extends JPanel {
 		}
 	}
 
+	// Main game loop
 	private void timedAction() {
 		ship.move();
+		ship.decaySpeed();
+
 		for (Rock rock : rocks){
 			rock.move();
 			rock.rotate();

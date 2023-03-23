@@ -7,8 +7,8 @@ public class Rock extends Sprite {
     private RockSize rockSize;
     private boolean rotateLeft;
 
-    public Rock(BufferedImage[] images, RockSize rockSize, double x, double y, int maxX, int maxY) {
-        super(images, x, y, maxX, maxY);
+    public Rock(BufferedImage[] images, RockSize rockSize, double x, double y, int maxX, int maxY, double deltaTime) {
+        super(images, x, y, maxX, maxY, deltaTime);
         this.rockSize = rockSize;
         this.rotateLeft = Math.random() < 0.5;
     }
