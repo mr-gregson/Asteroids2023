@@ -12,7 +12,6 @@ public class AsteroidsGame extends JFrame{
 	private InfoPanel infoPanel;
 	private GamePanel gamePanel;
 	
-	
 	public AsteroidsGame() {
 		// Configure window settings
 		setTitle("Gasteroids");

@@ -13,13 +13,12 @@ public class Rock extends Sprite {
         this.rotateLeft = Math.random() < 0.5;
     }
 
-    public RockSize getRockSize(){
+    public RockSize getRockSize() {
         return rockSize;
     }
 
-    public void rotate(){
+    public void rotate() {
         if (rotateLeft) rotateLeft();
         else rotateRight();
     }
-    
 }

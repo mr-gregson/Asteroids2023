@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.FlowLayout;
 import javax.swing.JPanel;
 
-
 public class InfoPanel extends JPanel {
 
     private static final long serialVersionUID = 1L;
@@ -35,7 +34,6 @@ public class InfoPanel extends JPanel {
         livesPanel = new DigitalLivesPanel(lives);
         add(livesPanel);
         fuelGauge = new FuelGauge();
-        add(fuelGauge);
-        
+        add(fuelGauge);        
     }
 }

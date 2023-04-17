@@ -2,20 +2,27 @@ package adam.gregson.asteroids;
 
 import java.awt.image.BufferedImage;
 
+import javax.lang.model.type.NullType;
+
+import java.awt.Shape;
+import java.awt.geom.Area;
+
 public abstract class Sprite {
 	
 	private BufferedImage[] images;
-	private int maxX;
-	private int maxY;
 
 	private int currentImage;
 	protected double angle;
-
 	
+	protected int maxX;
+	protected int maxY;
+
 	protected double x;
 	protected double y;
 	protected double dx;
 	protected double dy;
+
+	protected Shape collisionBounds;
 
 	// Will always be constant
 	protected double dt;
@@ -39,6 +46,12 @@ public abstract class Sprite {
 		this.angle = 2*Math.PI / images.length;
 	}
 	
+	public void setCollisionBounds(Shape bounds) {
+		collisionBounds = bounds;
+
+		var a = new Area(bounds);
+		
+	}
 
 	public void rotateLeft(){
 		currentImage--;
@@ -60,11 +73,12 @@ public abstract class Sprite {
 		dy += acceleration * Math.sin(currentImage * angle) * dt;
 	}
 
+
 	public void move() {
 		x += dx * dt;
 		y += dy * dt;
 
-		// Loop the position of the asteroid
+		// Loop the position of the asteroid around the map
 		if (x < 0) x += maxX;
 		if (y < 0) y += maxY;
 		if (x > maxX) x -= maxX;
@@ -81,7 +95,17 @@ public abstract class Sprite {
 
 	public double getY() {
 		return y;
-	}	
+	}
+
+	// Returns the x-component of the center of the image sprite
+	public double getVisualCenterX() {
+		return x + images[currentImage].getWidth() / 2;
+	}
+
+	// Returns the y-component of the center of the image sprite
+	public double getVisualCenterY() {
+		return y + images[currentImage].getHeight() / 2;
+	}
 
 	/**
 	 * @return integer 0 <=  n < images.length representing the number of 
@@ -89,6 +113,16 @@ public abstract class Sprite {
 	 */
 	public int getDirection(){
 		return currentImage;
+	}
+
+	// In radians
+	public double getAngleFacing() {
+		return currentImage * Math.PI / 32.0; // (2pi / 64);
+	}
+
+	// Will return a value in radians
+	public double getAngleOfDirectionOfMovement() {
+		return Math.atan2(dy, dx);
 	}
 
 	public void setDirection(int increments){
