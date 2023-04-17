@@ -10,8 +10,7 @@ public class DigitalLevelPanel extends JPanel{
     private JLabel textLabel;
     private JLabel levelLabel;
     
-    
-    public DigitalLevelPanel(int level){
+    public DigitalLevelPanel(int level) {
         this.level = level;
         setBackground(Color.BLACK);
         textLabel = new DigitalLabel("Level: ");

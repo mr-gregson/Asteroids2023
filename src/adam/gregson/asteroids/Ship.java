@@ -2,13 +2,23 @@ package adam.gregson.asteroids;
 
 import java.awt.image.BufferedImage;
 
-public class Ship extends Sprite{
+public class Ship extends Sprite {
+	//private static final int ROTATIONS = 64;
+	
+	private final double speedDecayFactor = 0.75;
+	private final double speedLimit = 750;
 
-	private static final int ROTATIONS = 64;
-	
-	
-	
-	public Ship(BufferedImage[] images,double x, double y, int maxX, int maxY) {
-		super(images, x, y, maxX, maxY);
+	public Ship(BufferedImage[] images,double x, double y, int maxX, int maxY, double deltaTime) {
+		super(images, x, y, maxX, maxY, deltaTime);
+	}
+
+	// Decay speed and keep speed in check
+	public void decaySpeed() {
+		dx -= dx*speedDecayFactor*dt;
+		dy -= dy*speedDecayFactor*dt;
+
+		if (getSpeed() > speedLimit) {
+			setSpeed(speedLimit);
+		}
 	}
 }
